@@ -17,6 +17,8 @@ class Article:
         if not hasattr(self, '_title'):
             if isinstance(value, str) and 5 <= len(value) <= 50:
                 self._title = value
+            else:
+                raise Exception("Title must be a string between 5 and 50 characters")
         
 class Author:
     def __init__(self, name):
@@ -32,6 +34,8 @@ class Author:
         if not hasattr(self, '_name'):
             if isinstance(value, str) and len(value) > 0:
                 self._name = value
+            else:
+                raise Exception("Name must be a non-empty string")
 
     def articles(self):
         return [article for article in Article.all if article.author == self]
@@ -48,9 +52,12 @@ class Author:
         return list(set([article.magazine.category for article in self.articles()]))
 
 class Magazine:
+    all = []
+    
     def __init__(self, name, category):
         self.name = name
         self.category = category
+        Magazine.all.append(self)
 
     @property
     def name(self):
@@ -60,6 +67,8 @@ class Magazine:
     def name(self, value):
         if isinstance(value, str) and 2 <= len(value) <= 16:
             self._name = value
+        else:
+            raise Exception("Name must be a string between 2 and 16 characters")
     
     @property
     def category(self):
@@ -69,6 +78,8 @@ class Magazine:
     def category(self, value):
         if isinstance(value, str) and len(value) > 0:
             self._category = value
+        else:
+            raise Exception("Category must be a non-empty string")
 
     def articles(self):
         return [article for article in Article.all if article.magazine == self]
@@ -91,3 +102,20 @@ class Magazine:
         
         result = [author for author, count in authors.items() if count > 2]
         return result if result else None
+    
+    @classmethod
+    def top_publisher(cls):
+        if not Article.all:
+            return None
+        
+        magazine_counts = {}
+        for article in Article.all:
+            if article.magazine in magazine_counts:
+                magazine_counts[article.magazine] += 1
+            else:
+                magazine_counts[article.magazine] = 1
+        
+        if not magazine_counts:
+            return None
+        
+        return max(magazine_counts, key=magazine_counts.get)
