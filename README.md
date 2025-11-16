@@ -1,5 +1,13 @@
 # Phase 3 Code Challenge: Articles - without SQLAlchemy (Updated)
 
+## ✅ SOLUTION
+
+**This repository contains the complete solution for the Phase 3 Code Challenge.**
+
+All core deliverables and bonus features have been implemented and tested successfully.
+
+---
+
 In this code challenge, you will be working with a Magazine domain.
 
 We have three models: `Author`, `Article`, and `Magazine`.
